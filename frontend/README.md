@@ -1,51 +1,66 @@
-# Bistro Moderne — Restaurant Frontend
+# Bistro Moderne — Frontend
 
-A production-ready restaurant website with React 18, Tailwind CSS, React Router, and an integrated AI chatbot widget.
+React 18 frontend for the Bistro Moderne restaurant app. Works with a FastAPI backend and a LangGraph AI agent for ordering.
+
+> ⚠️ Work in progress — AI agent integration is ongoing.
 
 ## Quick Start
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Start dev server (runs on http://localhost:5173)
 npm run dev
+# runs on http://localhost:5173
 ```
 
-The app works **without a backend** — all pages fall back to mock data automatically.
+Works without a backend — all pages fall back to mock data automatically.
+
+## Stack
+
+- React 18
+- Tailwind CSS
+- React Router
+- Vite
 
 ## Project Structure
 
 ```
 src/
 ├── api/
-│   └── client.js          # All fetch calls + mock fallbacks
+│   └── client.js              # All fetch calls + mock fallbacks
 ├── components/
-│   ├── Navbar.jsx          # Sticky nav with cart button
-│   ├── ChatWidget.jsx      # Floating AI chatbot overlay
-│   ├── MenuCard.jsx        # Menu item card + skeleton
-│   ├── CartSidebar.jsx     # Slide-in cart with order form
-│   ├── OrderTimeline.jsx   # Status progress steps
-│   ├── StatusBadge.jsx     # Color-coded status chip
-│   └── Toast.jsx           # Toast notifications + context
+│   ├── Navbar.jsx
+│   ├── ChatWidget.jsx         # AI chatbot overlay
+│   ├── MenuCard.jsx
+│   ├── CartSidebar.jsx
+│   ├── OrderTimeline.jsx
+│   ├── StatusBadge.jsx
+│   └── Toast.jsx
 ├── hooks/
-│   ├── useMenu.js          # Fetch + cache menu items
-│   ├── useCart.js          # Cart state with useReducer
-│   └── useChat.js          # Chat session management
+│   ├── useMenu.js
+│   ├── useCart.js
+│   └── useChat.js
 ├── pages/
-│   ├── Home.jsx            # Landing page with hero
-│   ├── Menu.jsx            # Menu grid with filters
-│   ├── Track.jsx           # Order tracking page
-│   └── Admin.jsx           # Admin dashboard
-├── App.jsx                 # Router + cart state
+│   ├── Home.jsx
+│   ├── Menu.jsx
+│   ├── Track.jsx
+│   └── Admin.jsx
+├── App.jsx
 └── main.jsx
 ```
 
-## API Integration
+## Pages
 
-The Vite dev server proxies `/api/*` to `http://localhost:8000` automatically (see `vite.config.js`).
+- **Home** — hero section, features, footer
+- **Menu** `/menu` — filter by category, add to cart, cart sidebar
+- **Track** `/track` — order tracking with status timeline
+- **Admin** `/admin` — live order table, auto-refreshes every 30s
 
-Your FastAPI backend needs CORS configured:
+## Backend
+
+Vite proxies `/api/*` to `http://localhost:8000` (see `vite.config.js`).
+
+Add CORS to FastAPI:
+
 ```python
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -58,12 +73,4 @@ app.add_middleware(
 )
 ```
 
-## Features
-
-- **Home**: Hero section, features, about, footer
-- **Menu** (`/menu`): Filter by category, search, add to cart, cart sidebar with order form
-- **Track** (`/track`): Order ID lookup with animated status timeline (try `DEMO-001`)
-- **Admin** (`/admin`): Live order table with inline status updates, auto-refreshes every 30s
-- **Chat widget**: Floating bottom-right button, session persisted in localStorage
-- Responsive from 375px to 1440px+
-- Loading skeletons, toast notifications, error states throughout
+See the backend folder for the FastAPI + LangGraph setup.
