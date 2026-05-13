@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Optional
 from models import CategoryEnum, OrderStatusEnum
@@ -40,7 +40,7 @@ class MenuItemResponse(BaseModel):
 class OrderItemResponse(BaseModel):
     id:           str
     menu_item_id: str
-    menu_item_name: str
+    menu_item_name:str
     quantity:     int
     unit_price:   float
     subtotal:     float
@@ -75,3 +75,33 @@ class OrderSummaryResponse(BaseModel):
     created_at:        datetime
  
     model_config = {"from_attributes": True}
+
+
+
+
+# order create
+
+class OrderItemIn(BaseModel):
+    menu_item_id: str
+    quantity:     int = Field(..., gt=0)
+
+class OrderCreate(BaseModel):
+    items:         list[OrderItemIn] = Field(...,min_length=1)
+    customer_name: str               = Field(..., min_length=1, max_length=120)
+    phone:         str               = Field(..., min_length=1, max_length=30)
+    notes:         Optional[str]     = None
+
+class StatusUpdate(BaseModel):
+    status:            OrderStatusEnum
+    estimated_minutes: Optional[int] = Field(None, gt=0)
+
+
+# Agent Schemas
+
+class ChatRequest(BaseModel):
+    message: str
+    session_id: str
+
+class ChatResponse(BaseModel):
+    reply: str
+    session_id: str

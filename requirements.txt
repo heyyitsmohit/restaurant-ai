@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pydantic
 SQLAlchemy
+langgraph
+langchain-ollama
