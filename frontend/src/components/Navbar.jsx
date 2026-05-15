@@ -9,7 +9,7 @@ export default function Navbar({ cartCount, onCartOpen }) {
     { to: '/', label: 'Home' },
     { to: '/menu', label: 'Menu' },
     { to: '/track', label: 'Track Order' },
-    { to: '/admin', label: 'Admin' },
+    // { to: '/admin', label: 'Admin' },
   ];
 
   return (

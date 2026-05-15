@@ -64,7 +64,7 @@ class Order(Base):
     customer_id       = Column(String(36), ForeignKey("customers.id"), nullable=False)
     status            = Column(Enum(OrderStatusEnum), default=OrderStatusEnum.received, nullable=False)
     total             = Column(Float, nullable=False)
-    estimated_minutes = Column(Integer, nullable=True)
+    estimated_minutes = Column(Integer, nullable=True, default=30)
     notes             = Column(Text, nullable=True)
  
     created_at        = Column(DateTime, server_default=func.now())

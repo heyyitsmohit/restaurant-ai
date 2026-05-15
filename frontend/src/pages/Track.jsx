@@ -3,18 +3,21 @@ import { useState } from 'react';
 import { fetchOrder } from '../api/client';
 import OrderTimeline from '../components/OrderTimeline';
 
-// Mock order for demo
+// Mock order for demo — matches API response shape exactly
 const MOCK_ORDER = {
-  order_id: 'DEMO-001',
+  id: 'DEMO-001',
   status: 'preparing',
   customer_name: 'Jane Smith',
+  phone: '555-123-4567',
+  notes: '',
   items: [
-    { name: 'Margherita Pizza', quantity: 2, price: 18.00 },
-    { name: 'Tiramisu', quantity: 1, price: 9.00 },
+    { id: '1', menu_item_id: '1', menu_item_name: 'Margherita Pizza', quantity: 2, unit_price: 18.00, subtotal: 36.00 },
+    { id: '2', menu_item_id: '2', menu_item_name: 'Tiramisu', quantity: 1, unit_price: 9.00, subtotal: 9.00 },
   ],
   total: 45.00,
   created_at: new Date(Date.now() - 15 * 60000).toISOString(),
-  estimated_time: '20 minutes',
+  updated_at: new Date(Date.now() - 15 * 60000).toISOString(),
+  estimated_minutes: 20,
 };
 
 export default function Track() {
@@ -37,7 +40,7 @@ export default function Track() {
       if (orderId.trim().toUpperCase() === 'DEMO-001') {
         setOrder(MOCK_ORDER);
       } else {
-        setError(`Order not found. Try "DEMO-001" for a demo.`);
+        setError(`Order not found. Please check your order ID.`);
       }
     } finally {
       setLoading(false);
@@ -58,7 +61,7 @@ export default function Track() {
           <input
             value={orderId}
             onChange={e => setOrderId(e.target.value)}
-            placeholder="Enter order ID (e.g. DEMO-001)"
+            placeholder="Enter your order ID"
             className="flex-1 border border-stone-200 bg-white rounded-xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#D85A30]/30 focus:border-[#D85A30] shadow-sm"
           />
           <button
@@ -85,16 +88,17 @@ export default function Track() {
         {/* Order result */}
         {order && (
           <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+
             {/* Header */}
             <div className="bg-[#D85A30]/10 border-b border-[#D85A30]/20 px-6 py-5 flex items-center justify-between flex-wrap gap-3">
               <div>
                 <p className="text-xs text-stone-500 font-medium mb-1">Order ID</p>
-                <p className="font-bold text-[#1a1a1a] font-mono text-lg">{order.order_id}</p>
+                <p className="font-bold text-[#1a1a1a] font-mono text-lg">{order.id}</p>
               </div>
-              {order.estimated_time && (
+              {order.estimated_minutes && (
                 <div className="text-right">
                   <p className="text-xs text-stone-500 font-medium mb-1">Estimated Time</p>
-                  <p className="font-bold text-[#D85A30]">⏱ {order.estimated_time}</p>
+                  <p className="font-bold text-[#D85A30]">⏱ {order.estimated_minutes} minutes</p>
                 </div>
               )}
             </div>
@@ -113,32 +117,39 @@ export default function Track() {
                   <div key={idx} className="flex items-center justify-between text-sm">
                     <span className="text-[#1a1a1a]">
                       <span className="text-stone-400 mr-2">{item.quantity}×</span>
-                      {item.name}
+                      {item.menu_item_name}
                     </span>
-                    {item.price && (
-                      <span className="text-stone-600 font-medium">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </span>
-                    )}
+                    <span className="text-stone-600 font-medium">
+                      ${Number(item.subtotal).toFixed(2)}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Notes */}
+            {order.notes && (
+              <div className="px-6 py-4 border-b border-stone-100">
+                <p className="text-xs text-stone-500 font-medium mb-1">Notes</p>
+                <p className="text-sm text-stone-700">{order.notes}</p>
+              </div>
+            )}
 
             {/* Total */}
             <div className="px-6 py-4 flex items-center justify-between">
               <span className="font-semibold text-[#1a1a1a]">Total</span>
               <span className="font-bold text-xl text-[#D85A30]">${Number(order.total).toFixed(2)}</span>
             </div>
+
           </div>
         )}
 
-        {/* Empty state hint */}
+        {/* Empty state */}
         {!order && !error && !loading && (
           <div className="text-center py-12 text-stone-400">
             <div className="text-5xl mb-4">📦</div>
             <p className="text-sm">Enter your order ID above to check your status.</p>
-            <p className="text-xs mt-2">You received an order ID when you placed your order.</p>
+            <p className="text-xs mt-2">You received an order ID when your order was placed.</p>
           </div>
         )}
       </div>

@@ -7,7 +7,7 @@ import { ToastProvider } from './components/Toast';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Track from './pages/Track';
-import Admin from './pages/Admin';
+// import Admin from './pages/Admin';
 import { useCart } from './hooks/useCart';
 
 function AppLayout() {
@@ -42,7 +42,7 @@ function AppLayout() {
           }
         />
         <Route path="/track" element={<Track />} />
-        <Route path="/admin" element={<Admin />} />
+        {/* <Route path="/admin" element={<Admin />} /> */}
       </Routes>
       <ChatWidget />
     </>
